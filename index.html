@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="author" content="João Pedro · dev.Kappiushon" />
+    <meta
+      name="description"
+      content="Lume — café & confeitaria. Cardápio digital com pedido pelo WhatsApp. Cafés especiais, doces de confeitaria e quitutes para acompanhar o seu dia."
+    />
+    <meta
+      name="keywords"
+      content="cardápio digital, café, confeitaria, lume, cafeteria, pedido whatsapp, menu online, doces, café especial, recife"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5ebd8" />
+    <meta name="copyright" content="João Pedro 2026" />
+    <meta http-equiv="content-language" content="pt-br" />
+    <meta property="og:title" content="Lume · café & confeitaria" />
+    <meta property="og:description" content="Cardápio digital. Peça pelo WhatsApp em segundos." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <title>Lume · café & confeitaria</title>
+    <script>
+      // Theme bootstrap: aplica antes do paint (anti-flash) e wirea o toggle
+      // direto aqui (não depende de ES modules) — garante que funcione
+      // mesmo em browsers/contextos que bloqueiem modules.
+      (() => {
+        const KEY = 'lume.theme';
+        const COLORS = { light: '#f5ebd8', dark: '#1c1108' };
+        const root = document.documentElement;
+
+        const read = () => { try { return localStorage.getItem(KEY); } catch { return null; } };
+        const write = (v) => { try { localStorage.setItem(KEY, v); } catch {} };
+        const prefers = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        const apply = (theme, persist) => {
+          root.dataset.theme = theme;
+          if (persist) write(theme);
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', COLORS[theme] || COLORS.light);
+          const btn = document.getElementById('theme-toggle');
+          if (btn) btn.setAttribute('aria-label', theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+        };
+
+        // estado inicial (anti-flash)
+        apply(read() || (prefers() ? 'dark' : 'light'), false);
+
+        // wire o botão assim que existir no DOM
+        const wire = () => {
+          const btn = document.getElementById('theme-toggle');
+          if (!btn || btn.dataset.wired) return;
+          btn.dataset.wired = '1';
+          btn.addEventListener('click', () => {
+            apply(root.dataset.theme === 'dark' ? 'light' : 'dark', true);
+          });
+        };
+        if (document.readyState !== 'loading') wire();
+        else document.addEventListener('DOMContentLoaded', wire);
+
+        // segue o SO se não houver override salvo
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+          if (read()) return;
+          apply(e.matches ? 'dark' : 'light', false);
+        });
+      })();
+    </script>
+  </head>
+
+  <body>
+    <header class="header" id="header">
+      <div class="container">
+        <a href="#home" class="logo" aria-label="Lume — voltar ao topo">
+          <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 11h12v3a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-3z"/>
+              <path d="M17 12h1.5a2.5 2.5 0 0 1 0 5H17"/>
+              <path d="M9 4c-.6 1 .6 2 0 3"/>
+              <path d="M13 3c-.6 1 .6 2 0 3"/>
+            </svg>
+          </span>
+          <span class="logo-text">lume</span>
+        </a>
+        <nav class="navbar" id="navbar" aria-label="Navegação principal">
+          <ul>
+            <li><a href="#home">Início</a></li>
+            <li><a href="#sobre">A casa</a></li>
+            <li><a href="#cardapio">Cardápio</a></li>
+            <li><a href="#contato">Visita</a></li>
+          </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema claro e escuro">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.5"/>
+            <line x1="12" y1="2" x2="12" y2="4"/>
+            <line x1="12" y1="20" x2="12" y2="22"/>
+            <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"/>
+            <line x1="17.66" y1="17.66" x2="19.07" y2="19.07"/>
+            <line x1="2" y1="12" x2="4" y2="12"/>
+            <line x1="20" y1="12" x2="22" y2="12"/>
+            <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"/>
+            <line x1="17.66" y1="6.34" x2="19.07" y2="4.93"/>
+          </svg>
+        </button>
+        <div class="menu-toggle" id="menu-toggle" role="button" aria-label="Abrir menu" aria-expanded="false" tabindex="0">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+      </div>
+    </header>
+
+    <main id="home" class="home">
+      <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
+
+      <!-- ── Hero ─────────────────────────── -->
+      <section class="hero">
+        <div class="container">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1>Uma casa de <em>café</em> &amp; afeto.</h1>
+              <p class="hero-tagline">Grão fresco, torra semanal e tempo pra ficar.</p>
+              <p class="lead">Monte seu pedido pelo cardápio e finalize pelo <em>WhatsApp</em>. A gente entrega no bairro ou separa pra retirada na casa.</p>
+              <div class="hero-ctas">
+                <a href="#cardapio" class="btn-hero btn-magnetic">Ver cardápio</a>
+                <a href="#sobre" class="btn-hero-outline">A casa</a>
+              </div>
+              <div class="hero-meta">
+                <div class="hero-meta-item">
+                  <span class="hero-meta-label">Horário</span>
+                  <span class="hero-meta-value">Seg a sáb · <strong>7h–20h</strong><br/>Dom · 8h–14h</span>
+                </div>
+                <div class="hero-meta-item">
+                  <span class="hero-meta-label">Endereço</span>
+                  <span class="hero-meta-value">Rua das Pitangas, 142<br/>Casa Forte · Recife</span>
+                </div>
+                <div class="hero-meta-item">
+                  <span class="hero-meta-label">Pedido mínimo</span>
+                  <span class="hero-meta-value"><strong>R$ 25</strong><br/>entrega no bairro</span>
+                </div>
+              </div>
+            </div>
+
+            <aside class="hero-art" aria-hidden="true">
+              <div class="hero-art-frame">
+                <img class="hero-art-photo"
+                     src="assets/images/hero/coffee.jpg"
+                     alt=""
+                     loading="eager"
+                     decoding="async" />
+                <div class="hero-art-tag">
+                  <span class="hero-art-tag-eyebrow">do dia</span>
+                  <span class="hero-art-tag-name">Coado V60</span>
+                  <span class="hero-art-tag-meta">Chapada Diamantina · torra média</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Sobre a casa ─────────────────── -->
+      <section id="sobre" class="about">
+        <div class="container">
+          <header class="section-head reveal">
+            <span class="section-num">02 / A casa</span>
+            <h2 class="section-title">Lume é uma <em>cafeteria de bairro</em>, sem pressa.</h2>
+          </header>
+          <div class="about-grid">
+            <p class="about-lead reveal">
+              A gente abre cedo, torra o café no quintal e assa o pão antes do sol esquentar. Cada doce sai de uma receita escrita à mão — algumas vieram da Dona Marisa, outras nasceram aqui mesmo, num dia de chuva.
+            </p>
+            <ul class="about-pillars">
+              <li class="reveal">
+                <span class="pillar-num">·01</span>
+                <h3>Café com origem</h3>
+                <p>Grãos de pequenos produtores da Chapada Diamantina e do Caparaó. Torra fresca, semanal, feita por aqui.</p>
+              </li>
+              <li class="reveal">
+                <span class="pillar-num">·02</span>
+                <h3>Doces sem pressa</h3>
+                <p>Manteiga de verdade, ovos da fazenda, chocolate brasileiro. Receitas que respeitam o tempo do açúcar e da farinha.</p>
+              </li>
+              <li class="reveal">
+                <span class="pillar-num">·03</span>
+                <h3>Recebido em casa</h3>
+                <p>Você pede pelo cardápio e a gente entrega quentinho, no seu bairro, ou separa pra retirar.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Cardápio ─────────────────────── -->
+      <section id="cardapio" class="menu-section">
+        <div class="container">
+          <header class="section-head reveal">
+            <span class="section-num">03 / Cardápio</span>
+            <h2 class="section-title">Hoje na <em>casa</em></h2>
+            <p class="section-sub">Toque em um item para adicionar ao pedido. Você revisa tudo antes de enviar.</p>
+          </header>
+
+          <div class="menu-tabs-wrap" id="menu-tabs-wrap">
+            <div class="menu-tabs reveal" role="tablist" aria-label="Categorias do cardápio" id="menu-tabs">
+              <!-- pills injetados via JS a partir de data/menu.js -->
+            </div>
+          </div>
+
+          <div class="menu-list" id="menu-list" aria-live="polite">
+            <!-- categorias e linhas injetados via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Visita / Contato ─────────────── -->
+      <section id="contato" class="visit">
+        <div class="container">
+          <header class="section-head reveal">
+            <span class="section-num">04 / Visita</span>
+            <h2 class="section-title">A casa <em>te espera</em>.</h2>
+          </header>
+          <div class="visit-grid">
+            <div class="visit-card reveal">
+              <span class="visit-label">Endereço</span>
+              <p>Rua das Pitangas, 142<br/>Casa Forte · Recife · PE</p>
+              <a href="https://maps.google.com/?q=Casa+Forte+Recife" target="_blank" rel="noopener" class="link-arrow">Ver no mapa <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="visit-card reveal">
+              <span class="visit-label">Horário</span>
+              <p>Segunda a sábado · 7h às 20h<br/>Domingo · 8h às 14h</p>
+            </div>
+            <div class="visit-card reveal">
+              <span class="visit-label">Fale com a casa</span>
+              <p>Atendimento pelo WhatsApp<br/>(81) 99921-4850</p>
+              <a href="https://wa.me/5581999214850" target="_blank" rel="noopener" class="link-arrow">Mandar oi <span aria-hidden="true">→</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer" id="footer">
+      <div class="footer-left">
+        <p>© 2026 <b>Lume</b> · café &amp; confeitaria</p>
+      </div>
+      <div class="footer-social">
+        <a href="https://instagram.com/lume.cafe" rel="noopener" target="_blank" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="https://wa.me/5581999214850" rel="noopener" target="_blank" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </a>
+      </div>
+      <div class="footer-right">
+        <p>by montesouza.dev</p>
+      </div>
+    </footer>
+
+    <!-- ── Cart FAB (botão flutuante do carrinho) ── -->
+    <button class="cart-fab" id="cart-fab" aria-label="Abrir pedido" aria-controls="cart-drawer" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 4h2l2.4 12.2a2 2 0 0 0 2 1.6h8.8a2 2 0 0 0 2-1.6L22 8H6"/>
+        <circle cx="9" cy="21" r="1.5"/>
+        <circle cx="18" cy="21" r="1.5"/>
+      </svg>
+      <span class="cart-fab-badge" id="cart-fab-badge" aria-hidden="true">0</span>
+      <span class="cart-fab-label">Pedido</span>
+    </button>
+
+    <!-- ── Sticky cart bar (mobile) ────── -->
+    <button class="cart-sticky" id="cart-sticky" type="button" aria-label="Abrir pedido" aria-controls="cart-drawer">
+      <span class="cart-sticky-left">
+        <span class="cart-sticky-count" id="cart-sticky-count">0</span>
+        <span class="cart-sticky-divider" aria-hidden="true"></span>
+        <span class="cart-sticky-meta">
+          <span class="cart-sticky-label">Seu pedido</span>
+          <span class="cart-sticky-total" id="cart-sticky-total">R$ 0,00</span>
+        </span>
+      </span>
+      <span class="cart-sticky-cta">
+        Ver pedido
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
+      </span>
+    </button>
+
+    <!-- ── Cart Drawer ───────────────────── -->
+    <aside class="cart-drawer" id="cart-drawer" aria-label="Seu pedido" aria-hidden="true" tabindex="-1">
+      <header class="cart-drawer-head">
+        <div>
+          <span class="section-num">Seu pedido</span>
+          <h3>Cestinha da casa</h3>
+        </div>
+        <button class="cart-drawer-close" id="cart-drawer-close" aria-label="Fechar pedido">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </header>
+
+      <div class="cart-drawer-body" id="cart-drawer-body">
+        <!-- itens injetados via JS; estado vazio renderizado se cart vazio -->
+      </div>
+
+      <footer class="cart-drawer-foot" id="cart-drawer-foot" hidden>
+        <div class="cart-totals">
+          <span>Subtotal</span>
+          <strong id="cart-total">R$ 0,00</strong>
+        </div>
+        <button class="btn-hero btn-magnetic cart-checkout-btn" id="cart-checkout-btn">
+          Finalizar pelo WhatsApp
+        </button>
+        <button class="cart-clear-btn" id="cart-clear-btn">limpar pedido</button>
+      </footer>
+    </aside>
+    <div class="cart-overlay" id="cart-overlay" aria-hidden="true"></div>
+
+    <!-- ── Checkout Modal ────────────────── -->
+    <div class="checkout-modal" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title" aria-hidden="true">
+      <div class="checkout-modal-inner">
+        <header class="checkout-modal-head">
+          <span class="section-num">Finalizar</span>
+          <h3 id="checkout-title">Quase lá. Confirma os dados:</h3>
+          <button class="checkout-modal-close" id="checkout-modal-close" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <form id="checkout-form" class="checkout-form" novalidate>
+          <label class="field">
+            <span>Nome</span>
+            <input type="text" id="ck-nome" name="nome" required autocomplete="name" placeholder="Seu primeiro nome" />
+          </label>
+
+          <fieldset class="field-group">
+            <legend>Como prefere receber?</legend>
+            <label class="radio">
+              <input type="radio" name="entrega" value="entrega" checked />
+              <span>Entrega · no bairro</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="entrega" value="retirada" />
+              <span>Retirada · na casa</span>
+            </label>
+          </fieldset>
+
+          <label class="field" id="ck-endereco-wrap">
+            <span>Endereço</span>
+            <input type="text" id="ck-endereco" name="endereco" placeholder="Rua, número, complemento" autocomplete="street-address" />
+          </label>
+
+          <label class="field">
+            <span>Forma de pagamento</span>
+            <select id="ck-pagamento" name="pagamento">
+              <option value="pix">Pix · na entrega</option>
+              <option value="dinheiro">Dinheiro · na entrega</option>
+              <option value="cartao">Cartão · maquininha</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Algo a mais? <em class="optional">(opcional)</em></span>
+            <textarea id="ck-obs" name="observacao" rows="2" placeholder="Sem açúcar no café, troco para R$ 50…"></textarea>
+          </label>
+
+          <div class="checkout-form-actions">
+            <button type="button" class="btn-hero-outline" id="ck-back">Voltar ao pedido</button>
+            <button type="submit" class="btn-hero btn-magnetic">Enviar pelo WhatsApp</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script type="module" src="assets/js/main.js"></script>
+  </body>
+</html>
