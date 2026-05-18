@@ -1452,6 +1452,14 @@ p em {
 
 .footer-left, .footer-right { margin: 0; text-transform: uppercase; }
 .footer-left b { color: #fbf5e7; font-weight: var(--weight-medium); }
+.footer-right a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(251, 245, 231, 0.18);
+  padding-bottom: 1px;
+  transition: color 0.25s ease, border-color 0.25s ease;
+}
+.footer-right a:hover { color: #fbf5e7; border-bottom-color: rgba(251, 245, 231, 0.55); }
 
 .footer-social {
   display: flex;
