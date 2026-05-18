@@ -2583,17 +2583,34 @@ body.is-modal-open {
   contain-intrinsic-size: 1px 480px;
 }
 
-/* ── Perf: backdrop-filter custa GPU em mobile / Edge.
-   Sólido em telas pequenas; desktop mantém o vidro fosco. */
-@media (max-width: 768px) {
-  .header,
-  .navbar,
+/* ── Perf: backdrop-filter custa GPU em todo hardware antigo (DDR3, iGPU).
+   Substituímos por background sólido com opacidade alta — diferença visual é
+   sutil mas o ganho em scroll/hover/troca-de-tema é grande. Mantemos o blur
+   reservado para hardware que aguenta via @media (min-resolution: 2dppx),
+   que coincide bem com Retina/HiDPI (geralmente máquinas mais novas). */
+.header,
+.navbar,
+.cart-drawer,
+.checkout-modal,
+.checkout-modal-content,
+.item-tag,
+.related-card {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+@media (min-resolution: 2dppx) and (min-width: 1024px) {
+  .header { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   .cart-drawer,
   .checkout-modal,
-  .checkout-modal-content,
-  .item-tag,
-  .related-card {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-  }
+  .checkout-modal-content { backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+}
+
+/* ── Perf: pula pintura/layout de categorias do cardápio fora da viewport.
+   `.menu-cat` é a maior superfície de repaint quando scrolla. NÃO aplicamos
+   na .menu-section (parent) porque ela é alvo de #cardapio âncora — quebra
+   scrollIntoView. */
+.menu-cat {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 800px;
 }
