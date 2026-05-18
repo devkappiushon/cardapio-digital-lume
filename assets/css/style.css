@@ -73,9 +73,9 @@ html, body { margin: 0; padding: 0; }
   --shadow-deep:   0 24px 56px -20px rgba(28, 17, 8, 0.28);
 
   /* Theme-aware translucent layers (precisam ser swappados no dark) */
-  --color-header-bg:     rgba(244, 233, 212, 0.82);
+  --color-header-bg:     rgba(244, 233, 212, 0.94);
   --color-nav-mobile-bg: rgba(244, 233, 212, 0.98);
-  --color-tabs-bg:       rgba(244, 233, 212, 0.92);
+  --color-tabs-bg:       rgba(244, 233, 212, 0.98);
 
   /* Radius */
   --radius-sm: 6px;
@@ -118,9 +118,9 @@ html, body { margin: 0; padding: 0; }
   --shadow-medium: 0 12px 32px -12px rgba(0, 0, 0, 0.65);
   --shadow-deep:   0 24px 56px -20px rgba(0, 0, 0, 0.75);
 
-  --color-header-bg:     rgba(28, 17, 8, 0.78);
+  --color-header-bg:     rgba(28, 17, 8, 0.94);
   --color-nav-mobile-bg: rgba(28, 17, 8, 0.98);
-  --color-tabs-bg:       rgba(28, 17, 8, 0.88);
+  --color-tabs-bg:       rgba(28, 17, 8, 0.97);
 }
 
 /* Transição suave ao trocar de tema (apenas em propriedades-chave, não em tudo). */
@@ -143,26 +143,15 @@ body {
   line-height: var(--leading-relaxed);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
   font-feature-settings: 'cv11', 'ss01';
   background-color: var(--color-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  background-attachment: scroll;
   color: var(--color-text);
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
   font-variant-numeric: tabular-nums;
-}
-
-/* Grain bem sutil — vibe papel artesanal */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.045;
-  pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: multiply;
 }
 
 section[id], main[id] { scroll-margin-top: 5rem; }
@@ -236,8 +225,8 @@ p em {
 /* ── Header ─────────────────────────────── */
 .header {
   background-color: var(--color-header-bg);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--color-heading);
   padding: 1.05rem 0;
   position: fixed;
@@ -970,8 +959,6 @@ p em {
   margin: 0 auto 2.5rem;
   max-width: 1100px;
   background: var(--color-tabs-bg);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
   border-radius: var(--radius);
   padding: 0.25rem 1rem;
   border: 1px solid var(--color-border-soft);
@@ -2575,4 +2562,12 @@ body.is-modal-open {
   .cart-fab { padding: 0.75rem 1rem; }
   .cart-fab-label { display: none; }
   .footer { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+}
+
+/* ── Perf: pula pintura/layout de seções fora da viewport (Chromium/Edge).
+   Mantemos fora seções com links âncora (.about, .menu-section, .visit) porque
+   content-visibility + scrollIntoView causa offset errado no salto da âncora. */
+.footer {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 480px;
 }
