@@ -47,12 +47,22 @@
         const prefers = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         const apply = (theme, persist) => {
+          // Swap instantâneo: desliga transitions enquanto troca o tema
+          // (evita animar 17+ seletores simultaneamente em hardware antigo).
+          root.classList.add('theme-changing');
           root.dataset.theme = theme;
           if (persist) write(theme);
           const meta = document.querySelector('meta[name="theme-color"]');
           if (meta) meta.setAttribute('content', COLORS[theme] || COLORS.light);
           const btn = document.getElementById('theme-toggle');
           if (btn) btn.setAttribute('aria-label', theme === 'dark' ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+          // 2 RAFs garante que o paint do novo tema aconteceu antes de
+          // reabilitar transitions (senão ainda anima do estado antigo).
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              root.classList.remove('theme-changing');
+            });
+          });
         };
 
         // estado inicial (anti-flash)

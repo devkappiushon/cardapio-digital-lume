@@ -133,6 +133,17 @@ html, body, .header, .menu-tabs-wrap, .menu-card, .visit-card, .cart-drawer,
   transition-timing-function: var(--ease-smooth);
 }
 
+/* Durante a troca de tema desligamos todas as transitions: em hardware antigo
+   (DDR3, GPU integrada) animar background+color+border em ~80 elementos ao
+   mesmo tempo lagga. Swap fica instantâneo e os hovers/animações continuam
+   normais nos demais momentos. */
+:root.theme-changing,
+:root.theme-changing *,
+:root.theme-changing *::before,
+:root.theme-changing *::after {
+  transition: none !important;
+}
+
 html { scroll-behavior: smooth; }
 
 body {
