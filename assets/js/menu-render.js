@@ -117,12 +117,15 @@ const menuCardHTML = (item, i) => {
     ? renderThumbArt(item.id)
     : getInitial(item.name);
   const thumbInner = `
-    <img class="menu-card-thumb-img"
-         src="assets/images/items/${item.id}.jpg"
-         alt=""
-         loading="lazy"
-         decoding="async"
-         onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='flex');" />
+    <picture class="menu-card-thumb-pic">
+      <source srcset="assets/images/items/${item.id}.webp" type="image/webp" />
+      <img class="menu-card-thumb-img"
+           src="assets/images/items/${item.id}.jpg"
+           alt=""
+           loading="lazy"
+           decoding="async"
+           onerror="const pic=this.closest('.menu-card-thumb-pic'); if(pic) pic.style.display='none'; const fb=this.closest('.menu-card-thumb')?.querySelector('.menu-card-thumb-fallback'); if(fb) fb.style.display='flex';" />
+    </picture>
     <span class="menu-card-thumb-fallback" aria-hidden="true">${fallbackContent}</span>
   `;
 

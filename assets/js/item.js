@@ -97,12 +97,15 @@ const renderItem = (item) => {
     <div class="item-hero">
       <div class="item-hero-art" aria-hidden="true">
         <span class="item-hero-art-eyebrow">${itemNum} / ${item.categoryLabel}</span>
-        <img class="item-hero-img"
-             src="assets/images/items/${item.id}.jpg"
-             alt=""
-             loading="eager"
-             decoding="async"
-             onerror="this.style.display='none'; this.nextElementSibling && (this.nextElementSibling.style.display='block');" />
+        <picture class="item-hero-pic">
+          <source srcset="assets/images/items/${item.id}.webp" type="image/webp" />
+          <img class="item-hero-img"
+               src="assets/images/items/${item.id}.jpg"
+               alt=""
+               loading="eager"
+               decoding="async"
+               onerror="const pic=this.closest('.item-hero-pic'); if(pic) pic.style.display='none'; const fb=this.closest('.item-hero-art')?.querySelector('.item-hero-art-fallback'); if(fb) fb.style.display='block';" />
+        </picture>
         <span class="item-hero-art-fallback">${fallbackArt}</span>
         <span class="item-hero-art-num">lume · feito em casa</span>
       </div>

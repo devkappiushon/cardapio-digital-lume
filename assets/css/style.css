@@ -430,7 +430,7 @@ p em {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 8rem 0 5rem;
+  padding: clamp(5rem, 10vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
   overflow: hidden;
 }
 
@@ -2570,4 +2570,19 @@ body.is-modal-open {
 .footer {
   content-visibility: auto;
   contain-intrinsic-size: 1px 480px;
+}
+
+/* ── Perf: backdrop-filter custa GPU em mobile / Edge.
+   Sólido em telas pequenas; desktop mantém o vidro fosco. */
+@media (max-width: 768px) {
+  .header,
+  .navbar,
+  .cart-drawer,
+  .checkout-modal,
+  .checkout-modal-content,
+  .item-tag,
+  .related-card {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }

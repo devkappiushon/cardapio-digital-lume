@@ -23,6 +23,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:creator" content="@devkappiushon" />
     <meta name="robots" content="index, follow" />
+    <link rel="preload" as="image" href="assets/images/hero/coffee.webp" type="image/webp" fetchpriority="high" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -157,11 +158,14 @@
 
             <aside class="hero-art" aria-hidden="true">
               <div class="hero-art-frame">
-                <img class="hero-art-photo"
-                     src="assets/images/hero/coffee.jpg"
-                     alt=""
-                     loading="eager"
-                     decoding="async" />
+                <picture>
+                  <source srcset="assets/images/hero/coffee.webp" type="image/webp" />
+                  <img class="hero-art-photo"
+                       src="assets/images/hero/coffee.jpg"
+                       alt=""
+                       loading="eager"
+                       decoding="async" />
+                </picture>
                 <div class="hero-art-tag">
                   <span class="hero-art-tag-eyebrow">do dia</span>
                   <span class="hero-art-tag-name">Coado V60</span>
