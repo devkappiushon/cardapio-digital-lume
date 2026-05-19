@@ -151,6 +151,36 @@ const menuCardHTML = (item, i) => {
   `;
 };
 
+/* ─── Skeleton (placeholders enquanto hidrata) ── */
+export const renderTabsSkeleton = (count = 5) => {
+  const tabs = TABS_EL();
+  if (!tabs) return;
+  tabs.innerHTML = Array.from({ length: count }, () =>
+    `<span class="menu-tab is-skeleton skeleton" aria-hidden="true"></span>`
+  ).join('');
+};
+
+export const renderMenuSkeleton = (count = 6) => {
+  const root = LIST_EL();
+  if (!root) return;
+  const rows = Array.from({ length: count }, (_, i) => `
+    <li class="menu-card is-skeleton" style="--row-i: ${i}" aria-hidden="true">
+      <div class="menu-card-link">
+        <span class="menu-card-thumb skeleton"></span>
+        <div class="menu-card-body">
+          <div class="menu-card-row1">
+            <span class="sk-line sk-line--lg sk-line--w-50 skeleton"></span>
+            <span class="sk-line sk-line--w-30 skeleton"></span>
+          </div>
+          <span class="sk-line sk-line--w-90 skeleton"></span>
+          <span class="sk-line sk-line--sm sk-line--w-70 skeleton"></span>
+        </div>
+      </div>
+    </li>
+  `).join('');
+  root.innerHTML = `<section class="menu-cat is-skeleton"><ul class="menu-items">${rows}</ul></section>`;
+};
+
 /* ─── Render principal ───────────────── */
 export const renderMenu = () => {
   const root = LIST_EL();

@@ -12,8 +12,37 @@ import { initCheckout } from './checkout.js';
 import { renderItemHeroArt, hasIllustration } from '../data/illustrations.js';
 
 const ROOT = () => document.getElementById('item-detail');
+const SKELETON_MIN_MS = 300;
 
 const getItemId = () => new URLSearchParams(window.location.search).get('id');
+
+/* ─── Skeleton: layout do item enquanto hidrata ── */
+const renderSkeleton = () => {
+  const root = ROOT();
+  if (!root) return;
+  root.innerHTML = `
+    <span class="sk-line sk-line--sm skeleton" style="width: 11rem;" aria-hidden="true"></span>
+    <div class="item-hero">
+      <div class="item-hero-art is-skeleton skeleton" aria-hidden="true"></div>
+      <header class="item-head sk-stack" aria-hidden="true">
+        <span class="sk-line sk-line--sm sk-line--w-30 skeleton"></span>
+        <span class="sk-line sk-line--xl sk-line--w-70 skeleton"></span>
+        <span class="sk-line sk-line--w-90 skeleton"></span>
+        <span class="sk-line sk-line--w-60 skeleton"></span>
+      </header>
+    </div>
+    <div class="item-actions" aria-hidden="true">
+      <span class="sk-line sk-line--lg sk-line--w-30 skeleton"></span>
+      <span class="sk-line sk-line--xl sk-line--w-50 skeleton"></span>
+    </div>
+    <section class="item-section sk-stack" aria-hidden="true">
+      <span class="sk-line sk-line--lg sk-line--w-40 skeleton"></span>
+      <span class="sk-line sk-line--w-90 skeleton"></span>
+      <span class="sk-line sk-line--w-70 skeleton"></span>
+      <span class="sk-line sk-line--w-60 skeleton"></span>
+    </section>
+  `;
+};
 
 /* ─── Render: estado vazio (id inválido) ── */
 const renderNotFound = () => {
@@ -163,10 +192,13 @@ const item = id ? itemsById[id] : null;
 initSharedUI();
 initCart();
 initCheckout();
+renderSkeleton();
 
-if (item) {
-  updateMeta(item);
-  renderItem(item);
-} else {
-  renderNotFound();
-}
+setTimeout(() => {
+  if (item) {
+    updateMeta(item);
+    renderItem(item);
+  } else {
+    renderNotFound();
+  }
+}, SKELETON_MIN_MS);

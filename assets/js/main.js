@@ -4,12 +4,20 @@
 ─────────────────────────────────────────────── */
 
 import { initSharedUI } from './ui.js';
-import { renderMenu, initMenuTabs } from './menu-render.js';
+import { renderMenu, initMenuTabs, renderMenuSkeleton, renderTabsSkeleton } from './menu-render.js';
 import { initCart } from './cart.js';
 import { initCheckout } from './checkout.js';
 
+const SKELETON_MIN_MS = 300;
+
 initSharedUI();
-initMenuTabs();
-renderMenu();
 initCart();
 initCheckout();
+
+renderTabsSkeleton();
+renderMenuSkeleton();
+
+setTimeout(() => {
+  initMenuTabs();
+  renderMenu();
+}, SKELETON_MIN_MS);
